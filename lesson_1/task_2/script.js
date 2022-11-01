@@ -1,12 +1,27 @@
-function rowsAndСolumns(firstNumber, secondNumber) {
-    if(isNaN(firstNumber) || isNaN(secondNumber)) {
-        console.log("Incorrect input!");
+function rowsAndСolumns(firstEnter, secondEnter) {
+    if(firstEnter.length <= 3 && secondEnter <= 10) {
+        let newStr = "";
+        let columns = "";
+        let i = 0;
+        let j = 0;
+        while(i++ < secondEnter) {
+            newStr += `${firstEnter} `;
+        }
+        while(j++ < secondEnter) {
+            columns += `${newStr}\n`;
+        }
+        console.log(columns);
     } else {
-        console.log(`First number: ${firstNumber}. Second number: ${secondNumber}. Sum: ${firstNumber + secondNumber}. Product: ${firstNumber * secondNumber}. Power: ${Math.pow(firstNumber,secondNumber)}.`);
+        console.log("Incorrect input!");
     }
 }
 
-console.log(rowsAndСolumns('aaa', 3));
+rowsAndСolumns(prompt('Enter'), parseInt(prompt('Enter the number')));
+
+
+
+
+
 
 
 
