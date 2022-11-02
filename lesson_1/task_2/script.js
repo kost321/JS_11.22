@@ -1,5 +1,5 @@
 function rowsAndСolumns(firstEnter, secondEnter) {
-    if(firstEnter.length <= 3 && secondEnter <= 10) {
+    if(firstEnter.length <= 3 && secondEnter > 0 && secondEnter <= 10 ) {
         let newStr = "";
         let columns = "";
         let i = 0;
@@ -16,13 +16,4 @@ function rowsAndСolumns(firstEnter, secondEnter) {
     }
 }
 
-rowsAndСolumns(prompt('Enter'), parseInt(prompt('Enter the number')));
-
-
-
-
-
-
-
-
-// prompt('Enter'), parseInt('Enter the number')
+rowsAndСolumns(prompt('Enter'), Number(prompt('Enter the number')));
