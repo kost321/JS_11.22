@@ -1,7 +1,7 @@
 function rowsAndСolumns(firstEnter, secondEnter) {
     if(firstEnter.length <= 3 && secondEnter > 0 && secondEnter <= 10 ) {
-        let newStr = "";
-        let columns = "";
+        let newStr = '';
+        let columns = '';
         let i = 0;
         let j = 0;
         while(i++ < secondEnter) {
@@ -12,7 +12,7 @@ function rowsAndСolumns(firstEnter, secondEnter) {
         }
         console.log(columns);
     } else {
-        console.log("Incorrect input!");
+        console.log('Incorrect input!');
     }
 }
 
