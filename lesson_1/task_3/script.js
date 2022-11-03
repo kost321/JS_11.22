@@ -1,18 +1,51 @@
-function operationsWithNumbers(firstNumber, secondNumber) {
-    let newFirstNumber;
-    let newSecondNumber;
-    if(firstNumber.length === 0 || secondNumber.length === 0) {
-        console.log("Incorrect input!");
+function warmOrHold(firstNumber, secondNumber) {
+    let newSecondNumber = firstNumber + 100;
+    let randomNumber;
+
+    if(firstNumber <= 0 || secondNumber <= 0 || isNaN(firstNumber) || isNaN(secondNumber)) {
+        alert('Please enter only positive numbers');
+        return
+    } else if(secondNumber < newSecondNumber) {
+        alert(`Please enter a number greater than ${newSecondNumber}`);
         return
     } else {
-        newFirstNumber = Number(firstNumber);
-        newSecondNumber = Number(secondNumber);
+        randomNumber = Math.floor(Math.random() * (firstNumber - secondNumber) + secondNumber);
+        // You can check the randomNumber
+        // console.log(`Random number is ${randomNumber}`);
     }
-    if(isNaN(newFirstNumber) || isNaN(newSecondNumber)) {
-        console.log("Incorrect input!");
-    } else {
-        console.log(`First number: ${newFirstNumber}. Second number: ${newSecondNumber}. Sum: ${newFirstNumber + newSecondNumber}. Product: ${newFirstNumber * newSecondNumber}. Power: ${+Math.pow(newFirstNumber,newSecondNumber)}.`);
-    }
+    
+    let userRandomNumber = Number(prompt('Enter the number')); 
+    let difference = 0;
+
+    if(userRandomNumber === randomNumber) {
+        alert('Great! It’s like you knew the number');    
+    } else if(userRandomNumber !== randomNumber) {
+        alert('Wrong number, you can try again');
+        userRandomNumber = Number(prompt('Enter the number'));
+        difference = randomNumber - userRandomNumber;
+        for(let i = 1; i < 10000; i++) {
+            if(userRandomNumber === randomNumber) {
+                i++;
+                alert(`You did it in ${i} attempts. Congratulations!`); 
+                break;
+            } else if(difference < 20 && difference > 1 || difference > -20 && difference < -1) {
+                alert('Warmer');
+                userRandomNumber = Number(prompt('Enter the number'));
+                difference = randomNumber - userRandomNumber;
+                continue;
+            } else if(difference >= 20 || difference <= -20) {
+                alert('Colder');
+                userRandomNumber = Number(prompt('Enter the number'));
+                difference = randomNumber - userRandomNumber;
+                continue;
+            } else if(difference === 1 || difference === -1 ) {
+                alert('You’re almost there');
+                userRandomNumber = Number(prompt('Enter the number'));
+                difference = randomNumber - userRandomNumber;
+                continue;
+            }
+        }        
+    }                
 }
 
-operationsWithNumbers(prompt('Enter the number (Attention: enter fractional numbers with a dot)'), prompt('Enter the number (Attention: enter fractional numbers with a dot)'));
+warmOrHold(Number(prompt('Enter the positive number')), Number(prompt('Enter the positive number')));
