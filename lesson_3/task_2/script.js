@@ -12,6 +12,9 @@
 const log100 = () => console.log(100);
 
 function createDebounceFunction(callback, delay) {
+  if(isNaN(delay) || typeof delay !== 'number'){
+    throw new Error();
+  }
   this.timeout;
   
   return function() {
