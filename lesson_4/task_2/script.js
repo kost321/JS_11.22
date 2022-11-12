@@ -1,31 +1,44 @@
-// const log1 = () => console.log("function 1 called!");
-// const log2 = () => console.log("function 2 called!");
-
-// const debounceLog100 = createDebounceFunction(log1, 3000);
-// debounceLog100();
-
-// setTimeout(() => {
-//     const debounceLog200 = createDebounceFunction(log2, 3000);
-// debounceLog200();
-// },1500)
-
-const log100 = () => console.log(100);
-
-function createDebounceFunction(callback, delay) {
-  if(isNaN(delay) || typeof delay !== 'number'){
-    throw new Error();
+class Calculator {
+  constructor(num1, num2) {
+    if(isNaN(num1) || isNaN(num2) || arguments.length > 2 || typeof num1 !== 'number' || typeof num2 !== 'number' || !isFinite(num1) || !isFinite(num2)){
+      throw new Error;
+    }
+    this.num1 = num1;
+    this.num2 = num2;
   }
-  this.timeout;
-  
-  return function() {
-      clearTimeout(this.timeout);
-      this.timeout = setTimeout(callback, delay);
+
+  setX = (...args) => {
+    if(args.length === 0 || typeof args[0] !== 'number' || isNaN(args[0]) || !isFinite(args[0])) {
+      throw new Error;
+    }
+    this.num1 = args[0];
+  }
+
+  setY = (...args) => {
+    if(args.length === 0 || args.length > 1 || typeof args[0] !== 'number' || isNaN(args[0]) || !isFinite(args[0])) {
+      throw new Error;
+    }
+    this.num2 = args[0];
+  }
+
+  getSum = () => {
+    return this.num1 + this.num2;
+  }
+
+  getMul = () => {
+    return this.num1 * this.num2;
+  }
+
+  getSub = () => {
+    return this.num1 - this.num2;
+  }
+
+  getDiv = () => {
+    if(this.num2 === 0) {
+      throw new Error;
+    }
+    return this.num1 / this.num2;
   }
 }
 
-const debounceLog100 = createDebounceFunction(log100, 10000);
-
-debounceLog100();
-setTimeout(debounceLog100, 1000);
-setTimeout(debounceLog100, 1000);
-setTimeout(debounceLog100, 3000);
+const calculator = new Calculator(2, 2);
