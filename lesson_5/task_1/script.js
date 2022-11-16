@@ -166,32 +166,16 @@ class LinkedList {
     return this.length;
   }
 
-  pop(){
-      if (this.length === 0) {
-        throw new Error('Empty stack');
-      };
-      let temp = this.first;
+  find(elem){
+    let currentNode = this.first;
+    while(currentNode) {
+      if(currentNode.val === elem){
+        return currentNode.val;
+      }
 
-      if (this.length === 1){
-          this.last = null;
-      }        
-      this.first = this.first.next;        
-      this.length--;
-      console.log(this)
-      console.log(temp.val)
-      return temp.val;
-  }
-
-  peek(){
-    if(this.length === 0) {
-      return null;
+      currentNode = currentNode.next;
     }
-    console.log(this.first)
-    return this.first.val;
-  }
-
-  isEmpty(){
-    return this.length === 0 ? false : true;
+    return null
   }
 
   toArray(){
@@ -213,7 +197,8 @@ class LinkedList {
   }
 
   static fromIterable(iterable) {
-    let newObj = new Stack();
+    debugger
+    let newObj = new LinkedList();
     let checkIterable = false;
     try {
       for(let i in iterable) {
@@ -227,16 +212,18 @@ class LinkedList {
       throw new Error('Not iterable')
     }
     for(const [value, key] in iterable) {
-      newObj.push(iterable[value]);    
+      newObj.prepend(iterable[value]);    
     }
     return newObj;
   }  
 }
 
 let linkedList = new LinkedList();
-linkedList.append(2);
-linkedList.append(3);
-linkedList.prepend(5);
-linkedList.prepend(7);
-
-linkedList.toArray()
+// linkedList.append(2);
+// linkedList.append(3);
+// linkedList.prepend(5);
+// linkedList.prepend(7);
+// obj = '23'
+// LinkedList.fromIterable(obj)
+// console.log(linkedList.find(5));
+// console.log(linkedList.toArray());
