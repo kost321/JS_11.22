@@ -65,30 +65,24 @@ class Stack {
     return this.length === 0 ? false : true;
   }
 
-  toArray() {
+  toArray(){
     let newArr = [];
-    if(this.length === 0){
+    if(this.length === 0) {
       return newArr;
     }
-    
-    const iterate = (obj) => {
-      Object.keys(obj).forEach(key => {
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
-          iterate(obj[key]);
-        } else if(obj[key] !== null) {
-          newArr.push(obj[key]);
-        }
-      })
+    let currentNode =  this.first;
+    while(currentNode) {
+      newArr.push(currentNode.val);
+      currentNode = currentNode.next;
     }
-    iterate(this.first);
     return newArr;
   }
 
   static fromIterable(iterable) {
-    let newObj = new Stack(iterable.length);
     if(!(Symbol.iterator in Object(iterable))) {
       throw new Error('Not iterable');
     }
+    let newObj = new Stack(iterable.length);
    
     for(const [value, key] in iterable) {
       newObj.push(iterable[value]);    
@@ -159,27 +153,96 @@ class LinkedList {
     if(this.length === 0) {
       return newArr;
     }
-    const iterate = (obj) => {
-      Object.keys(obj).forEach(key => {
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
-          iterate(obj[key]);
-        } else if(obj[key] !== null){
-          newArr.push(obj[key]);
-        }
-      })
+    let currentNode =  this.first;
+    while(currentNode) {
+      newArr.push(currentNode.val);
+      currentNode = currentNode.next;
     }
-    iterate(this.first);
     return newArr;
   }
 
   static fromIterable(iterable) {
-    let newObj = new LinkedList();
     if(!(Symbol.iterator in Object(iterable))) {
       throw new Error('Not iterable');
     }
+    let newObj = new LinkedList();
+
     for(const [value, key] in iterable) {
       newObj.prepend(iterable[value]);    
     }
     return newObj;
   }  
 }
+
+
+//---------------------------task_3---------------------------
+
+
+class Car {
+  #brandValue = '';
+  #modelValue = '';
+  #yearOfManufacturingNumber = 1950;
+  #maxSpeed = 100;
+  #maxFuelVolume = 20;
+  #fuelConsumption = 1;
+  #damage = 1;
+  #currentFuelVolume = 0;
+  #isStarted = false;
+  #mileage = 0;
+  #health = 100;
+
+  constructor () {}
+
+  set brand (value) {
+    if (typeof value !== 'string') {
+      throw new Error('Invalid limit value');
+    }
+    if(value.length < 1 || value.length > 50) {
+      throw new Error('Invalid brand name');
+    }
+    this.#brandValue = value;
+  }
+  get brand () {
+    return this.#brandValue;
+  }
+
+
+  set model (value) {
+    if (typeof value !== 'string') {
+      throw new Error('Invalid limit value');
+    }
+    if(value.length < 1 || value.length > 50) {
+      throw new Error('Invalid brand name');
+    }
+    this.#modelValue = value;
+  }
+  get model () {
+    return this.#modelValue;
+  }
+
+
+  set yearOfManufacturing (value) {
+    debugger
+    const d = new Date("July 21, 1983 01:15:00");
+    let year = d.getFullYear();
+    if (!Number.isFinite(value)) {
+      throw new Error('Invalid limit value');
+    }
+    if(value > this.#yearOfManufacturingNumber || value < year) {
+      throw new Error('Invalid brand name');
+    }
+    this.#yearOfManufacturingNumber = value;
+  }
+  get yearOfManufacturing () {
+    return this.#yearOfManufacturingNumber;
+  }
+
+  
+
+}
+
+
+const c = new Car();
+
+c.yearOfManufacturing = -1;
+console.log('public', c.model);
