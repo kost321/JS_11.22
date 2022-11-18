@@ -334,8 +334,11 @@ class Car {
     let distance = speedValue * hoursValue;
     let estimatedTravelDistance = (this.#currentFuelVolume / this.fuelConsumption) * 100;
     let restKilometersWithHealth = (this.#health / this.#damage) * 100;
-    if((!Number.isFinite(speedValue) || speedValue <= 0) || speedValue > this.#maxSpeed) {
+    if((!Number.isFinite(speedValue) || speedValue <= 0)) {
       throw new Error('Invalid speed');
+    }
+    if(speedValue > this.#maxSpeed) {
+      throw new Error(`Car can't go this fast`)
     }
     if((!Number.isFinite(hoursValue) || hoursValue <= 0)) {
       throw new Error('Invalid duration');
