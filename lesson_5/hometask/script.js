@@ -165,7 +165,7 @@ class LinkedList {
     let newObj = new LinkedList();
 
     for(const [value, key] in iterable) {
-      newObj.prepend(iterable[value]);    
+      newObj.append(iterable[value]);    
     }
     return newObj;
   }  
