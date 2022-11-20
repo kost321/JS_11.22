@@ -12,7 +12,8 @@ class Calculator {
     }
   
     delete() {
-      this.currentOperand = this.currentOperand.toString().slice(0, -1);
+        // добавить удаление знаков
+            this.currentOperand = this.currentOperand.toString().slice(0, -1);
     }
   
     appendNumber(number) {
@@ -69,14 +70,31 @@ class Calculator {
         } else {
             let lengthOfNumber = this.currentOperand.toString();
             const decimalDigits = lengthOfNumber.split('.')[1];
-            if(decimalDigits > 8) {
+            if(decimalDigits === undefined) {
+                this.currentOperandText.innerText = this.currentOperand;
+            } else if (this.currentOperand === 0.30000000000000004) {
+                this.currentOperandText.innerText = this.currentOperand.toFixed(1);
+            } else if(decimalDigits.length > 8) {
                 this.currentOperandText.innerText = this.currentOperand.toFixed(8);
             } else {
                 this.currentOperandText.innerText = this.currentOperand;
             }
         }
         if (this.operation) {
-            this.previousOperandText.innerText = `${this.previousOperand} ${this.operation}`;
+            if(typeof this.previousOperand === 'number') {
+                let lengthOfNumber = this.previousOperand.toString();
+                const decimalDigits = lengthOfNumber.split('.')[1];
+                if(decimalDigits === undefined) {
+                    this.previousOperandText.innerText = `${this.previousOperand} ${this.operation}`;
+                } else if(decimalDigits.length > 8) {
+                    this.previousOperandText.innerText = `${this.previousOperand.toFixed(8)} ${this.operation}`;
+                } else {
+                    this.previousOperandText.innerText = `${this.previousOperand} ${this.operation}`;
+                }
+            } else {
+                this.previousOperandText.innerText = `${this.previousOperand} ${this.operation}`;   
+
+            }
         } else {
             this.previousOperandText.innerText = '';
         }
@@ -119,6 +137,8 @@ allClearButton.addEventListener('click', () => {
 })
   
 deleteButton.addEventListener('click', () => {
+
+    debugger
     calculator.delete();
     calculator.updateDisplay();
 })
