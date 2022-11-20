@@ -2,7 +2,6 @@ class Calculator {
     constructor(previousOperandText, currentOperandText) {
         this.previousOperandText = previousOperandText;
         this.currentOperandText = currentOperandText;
-        this.operation;
         this.clear();
     }
   
@@ -65,7 +64,17 @@ class Calculator {
     }
   
     updateDisplay() {
-        this.currentOperandText.innerText = this.currentOperand;
+        if(typeof this.currentOperand === 'string') {
+            this.currentOperandText.innerText = this.currentOperand;
+        } else {
+            let lengthOfNumber = this.currentOperand.toString();
+            const decimalDigits = lengthOfNumber.split('.')[1];
+            if(decimalDigits > 8) {
+                this.currentOperandText.innerText = this.currentOperand.toFixed(8);
+            } else {
+                this.currentOperandText.innerText = this.currentOperand;
+            }
+        }
         if (this.operation) {
             this.previousOperandText.innerText = `${this.previousOperand} ${this.operation}`;
         } else {
