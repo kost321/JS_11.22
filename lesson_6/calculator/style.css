@@ -36,10 +36,9 @@ body {
     grid-column: 1 / -1;
     background-color: #b9d093;
     display: flex;
-    align-items: center;
-    justify-content: end;
+    flex-direction: column;
+    align-items: flex-end;
     padding: 10px;
-    word-wrap: break-word;
     word-break: break-all;
     border: 6px solid #00761f;
     border-radius: 20px;

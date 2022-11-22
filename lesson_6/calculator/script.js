@@ -2,6 +2,7 @@ class Calculator {
     constructor(previousOperandElem, currentOperandElem) {
         this.previousOperandElem = previousOperandElem;
         this.currentOperandElem = currentOperandElem;
+        this.computation;
         this.clear();
     }
   
@@ -12,6 +13,7 @@ class Calculator {
     }
   
     changeSign() {
+        // добавить минус перед числом
         if(this.currentOperand === '') {
             this.currentOperand = this.currentOperand;
         } else {
@@ -39,9 +41,21 @@ class Calculator {
     appendNumber(number) {
         if (number === '.' && this.currentOperand.includes('.')) {
             return;
+        } else if(this.computation) {
+            debugger
+            this.currentOperand = number.toString();            
+        } else if(typeof this.currentOperand === 'number'){
+            this.currentOperand = this.format(this.currentOperand);
+            this.currentOperand = this.currentOperand.toString() + number.toString();
         } else {
             this.currentOperand = this.currentOperand.toString() + number.toString();
-        }   
+        }
+
+        if(this.currentOperand.length >= 15) {
+            this.currentOperand = this.currentOperand.slice(0,15);
+            this.currentOperand.length
+            // this.currentOperand = this.currentOperand.toString();
+        }
     }
   
     chooseOperation(operation) {
@@ -57,6 +71,7 @@ class Calculator {
     }
   
     compute() {
+        debugger
         let computation;
         const prev = parseFloat(this.previousOperand);
         const current = parseFloat(this.currentOperand);
@@ -82,6 +97,7 @@ class Calculator {
         this.currentOperand = computation;
         this.operation = undefined;
         this.previousOperand = '';
+        this.computation = computation;
     }
     
     format(operand) {
@@ -90,7 +106,9 @@ class Calculator {
 
     updateDisplay() {
         if(typeof this.currentOperand === 'string') {
+            this.currentOperand.length
             this.currentOperandElem.innerText = this.currentOperand;
+        // ввести ограничение по вводу цифр в общем
         } else {
             let lengthOfNumber = this.currentOperand.toString();
             const decimalDigits = lengthOfNumber.split('.')[1];
@@ -114,13 +132,12 @@ class Calculator {
                     this.previousOperandElem.innerText = `${this.previousOperand} ${this.operation}`;
                 }
             } else {
-                this.previousOperandElem.innerText = `${this.previousOperand} ${this.operation}`;   
-
+                this.previousOperandElem.innerText = `${this.previousOperand} ${this.operation}`;  
             }
         } else {
             this.previousOperandElem.innerText = '';
         }
-        if (this.currentOperand === Infinity || this.currentOperand === -Infinity || this.currentOperand === NaN) {
+        if (this.currentOperand === Infinity || this.currentOperand === -Infinity || Number.isNaN(this.currentOperand)) {
             this.currentOperandElem.innerText = `Can't divide by zero`;
             this.clear();
         }
