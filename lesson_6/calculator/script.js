@@ -1,7 +1,7 @@
 class Calculator {
-    constructor(previousOperandText, currentOperandText) {
-        this.previousOperandText = previousOperandText;
-        this.currentOperandText = currentOperandText;
+    constructor(previousOperandElem, currentOperandElem) {
+        this.previousOperandElem = previousOperandElem;
+        this.currentOperandElem = currentOperandElem;
         this.clear();
     }
   
@@ -11,9 +11,29 @@ class Calculator {
         this.operation = undefined;
     }
   
+    changeSign() {
+        if(this.currentOperand === '') {
+            this.currentOperand = this.currentOperand;
+        } else {
+            this.currentOperand =  -this.currentOperand;
+        }
+    }
+
     delete() {
-        // добавить удаление знаков
+        let lengthOfNumber = this.currentOperand.toString();
+        const decimalDigits = lengthOfNumber.split('.')[1];
+        if (lengthOfNumber.length === 0) {
+            this.operation = undefined;
+            this.currentOperand = this.previousOperand;
+            this.previousOperand = '';
+        } else if(decimalDigits === undefined) {
             this.currentOperand = this.currentOperand.toString().slice(0, -1);
+        } else if(decimalDigits.length > 8){
+            this.currentOperand = this.format(this.currentOperand);
+            this.currentOperand = this.currentOperand.toString().slice(0, -1);
+        } else {
+            this.currentOperand = this.currentOperand.toString().slice(0, -1);
+        }
     }
   
     appendNumber(number) {
@@ -63,21 +83,23 @@ class Calculator {
         this.operation = undefined;
         this.previousOperand = '';
     }
-  
+    
+    format(operand) {
+        return Math.round(parseFloat(operand) * 100000000) / 100000000;
+    }
+
     updateDisplay() {
         if(typeof this.currentOperand === 'string') {
-            this.currentOperandText.innerText = this.currentOperand;
+            this.currentOperandElem.innerText = this.currentOperand;
         } else {
             let lengthOfNumber = this.currentOperand.toString();
             const decimalDigits = lengthOfNumber.split('.')[1];
             if(decimalDigits === undefined) {
-                this.currentOperandText.innerText = this.currentOperand;
-            } else if (this.currentOperand === 0.30000000000000004) {
-                this.currentOperandText.innerText = this.currentOperand.toFixed(1);
+                this.currentOperandElem.innerText = this.currentOperand;
             } else if(decimalDigits.length > 8) {
-                this.currentOperandText.innerText = this.currentOperand.toFixed(8);
+                this.currentOperandElem.innerText = this.format(this.currentOperand);
             } else {
-                this.currentOperandText.innerText = this.currentOperand;
+                this.currentOperandElem.innerText = this.currentOperand;
             }
         }
         if (this.operation) {
@@ -85,18 +107,26 @@ class Calculator {
                 let lengthOfNumber = this.previousOperand.toString();
                 const decimalDigits = lengthOfNumber.split('.')[1];
                 if(decimalDigits === undefined) {
-                    this.previousOperandText.innerText = `${this.previousOperand} ${this.operation}`;
+                    this.previousOperandElem.innerText = `${this.previousOperand} ${this.operation}`;
                 } else if(decimalDigits.length > 8) {
-                    this.previousOperandText.innerText = `${this.previousOperand.toFixed(8)} ${this.operation}`;
+                    this.previousOperandElem.innerText = `${this.format(this.previousOperand)} ${this.operation}`;
                 } else {
-                    this.previousOperandText.innerText = `${this.previousOperand} ${this.operation}`;
+                    this.previousOperandElem.innerText = `${this.previousOperand} ${this.operation}`;
                 }
             } else {
-                this.previousOperandText.innerText = `${this.previousOperand} ${this.operation}`;   
+                this.previousOperandElem.innerText = `${this.previousOperand} ${this.operation}`;   
 
             }
         } else {
-            this.previousOperandText.innerText = '';
+            this.previousOperandElem.innerText = '';
+        }
+        if (this.currentOperand === Infinity || this.currentOperand === -Infinity || this.currentOperand === NaN) {
+            this.currentOperandElem.innerText = `Can't divide by zero`;
+            this.clear();
+        }
+        if (this.previousOperand === Infinity || this.previousOperand === -Infinity || this.previousOperand === NaN) {
+            this.previousOperandElem.innerText = `Can't divide by zero`;
+            this.clear();
         }
     }
 }
@@ -106,12 +136,14 @@ const numberButtons = document.querySelectorAll('[data-number]');
 const operationButtons = document.querySelectorAll('[data-operation]');
 const equalsButton = document.querySelector('[data-equals]');
 const deleteButton = document.querySelector('[data-delete]');
+const changeSign = document.querySelector('[data-sign-change]');
 const allClearButton = document.querySelector('[data-all-clear]');
 const previousOperandTextElement = document.querySelector('[data-previous-operand]');
 const currentOperandTextElement = document.querySelector('[data-current-operand]');
   
 const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement);
   
+
 numberButtons.forEach(button => {
     button.addEventListener('click', () => {
         calculator.appendNumber(button.innerText);
@@ -119,6 +151,11 @@ numberButtons.forEach(button => {
     })
   })
   
+changeSign.addEventListener('click', () => {
+    calculator.changeSign();
+    calculator.updateDisplay();
+})
+
 operationButtons.forEach(button => {
     button.addEventListener('click', () => {
         calculator.chooseOperation(button.innerText);
@@ -137,8 +174,6 @@ allClearButton.addEventListener('click', () => {
 })
   
 deleteButton.addEventListener('click', () => {
-
-    debugger
     calculator.delete();
     calculator.updateDisplay();
 })
