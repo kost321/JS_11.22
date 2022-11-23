@@ -2,7 +2,6 @@ class Calculator {
     constructor(previousOperandElem, currentOperandElem) {
         this.previousOperandElem = previousOperandElem;
         this.currentOperandElem = currentOperandElem;
-        this.computation;
         this.clear();
     }
   
@@ -13,11 +12,12 @@ class Calculator {
     }
   
     changeSign() {
-        // добавить минус перед числом
         if(this.currentOperand === '') {
             this.currentOperand = this.currentOperand;
+        } else if(this.currentOperand.toString().includes('-')) {
+            this.currentOperand = this.currentOperand.toString().substr(1);
         } else {
-            this.currentOperand =  -this.currentOperand;
+            this.currentOperand =  `-${this.currentOperand}`;
         }
     }
 
@@ -30,7 +30,7 @@ class Calculator {
             this.previousOperand = '';
         } else if(decimalDigits === undefined) {
             this.currentOperand = this.currentOperand.toString().slice(0, -1);
-        } else if(decimalDigits.length > 8){
+        } else if(decimalDigits.length > 8) {
             this.currentOperand = this.format(this.currentOperand);
             this.currentOperand = this.currentOperand.toString().slice(0, -1);
         } else {
@@ -39,26 +39,26 @@ class Calculator {
     }
   
     appendNumber(number) {
-        if (number === '.' && this.currentOperand.includes('.')) {
+        if (number === '.' && this.currentOperand.toString().includes('.')) {
             return;
-        } else if(this.computation) {
-            debugger
-            this.currentOperand = number.toString();            
-        } else if(typeof this.currentOperand === 'number'){
-            this.currentOperand = this.format(this.currentOperand);
-            this.currentOperand = this.currentOperand.toString() + number.toString();
-        } else {
-            this.currentOperand = this.currentOperand.toString() + number.toString();
         }
-
+        if(number ==='00' && this.currentOperand === '') {
+            this.currentOperand = '0';
+            return;
+        }
+        if(this.previousOperand !== '') {
+            this.currentOperand = this.currentOperand + number.toString();
+        } else if(this.previousOperand === '' && typeof this.currentOperand !== 'number') {
+            this.currentOperand = this.currentOperand + number.toString();
+        } else { 
+            this.currentOperand = number.toString();
+        }
         if(this.currentOperand.length >= 15) {
             this.currentOperand = this.currentOperand.slice(0,15);
-            this.currentOperand.length
-            // this.currentOperand = this.currentOperand.toString();
         }
     }
   
-    chooseOperation(operation) {
+    chooseOperation(operation) {       
         if (this.currentOperand === '') { 
             return;
         }
@@ -71,12 +71,11 @@ class Calculator {
     }
   
     compute() {
-        debugger
         let computation;
         const prev = parseFloat(this.previousOperand);
         const current = parseFloat(this.currentOperand);
         if (isNaN(prev) || isNaN(current)) {
-            return  
+            return;
         } 
         switch (this.operation) {
             case '+':
@@ -97,7 +96,6 @@ class Calculator {
         this.currentOperand = computation;
         this.operation = undefined;
         this.previousOperand = '';
-        this.computation = computation;
     }
     
     format(operand) {
@@ -106,9 +104,14 @@ class Calculator {
 
     updateDisplay() {
         if(typeof this.currentOperand === 'string') {
-            this.currentOperand.length
-            this.currentOperandElem.innerText = this.currentOperand;
-        // ввести ограничение по вводу цифр в общем
+            const decimalDigits = this.currentOperand.split('.')[1];
+            if(decimalDigits === undefined) {
+                this.currentOperandElem.innerText = this.currentOperand;
+            } else if(decimalDigits.length > 8) {
+                this.currentOperandElem.innerText = this.format(this.currentOperand);
+            } else {
+                this.currentOperandElem.innerText = this.currentOperand;
+            }
         } else {
             let lengthOfNumber = this.currentOperand.toString();
             const decimalDigits = lengthOfNumber.split('.')[1];
@@ -120,6 +123,7 @@ class Calculator {
                 this.currentOperandElem.innerText = this.currentOperand;
             }
         }
+    
         if (this.operation) {
             if(typeof this.previousOperand === 'number') {
                 let lengthOfNumber = this.previousOperand.toString();
@@ -132,7 +136,7 @@ class Calculator {
                     this.previousOperandElem.innerText = `${this.previousOperand} ${this.operation}`;
                 }
             } else {
-                this.previousOperandElem.innerText = `${this.previousOperand} ${this.operation}`;  
+                this.previousOperandElem.innerText = `${this.format(this.previousOperand)} ${this.operation}`;  
             }
         } else {
             this.previousOperandElem.innerText = '';
