@@ -46,6 +46,10 @@ class Calculator {
             this.currentOperand = '0';
             return;
         }
+        if((number === '00' || number === '0') && this.currentOperand === '0') {
+            this.currentOperand = '0';
+            return
+        }
         if(this.previousOperand !== '') {
             this.currentOperand = this.currentOperand + number.toString();
         } else if(this.previousOperand === '' && typeof this.currentOperand !== 'number') {
@@ -123,7 +127,7 @@ class Calculator {
                 this.currentOperandElem.innerText = this.currentOperand;
             }
         }
-    
+
         if (this.operation) {
             if(typeof this.previousOperand === 'number') {
                 let lengthOfNumber = this.previousOperand.toString();
